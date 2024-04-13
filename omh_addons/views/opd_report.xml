@@ -1,0 +1,41 @@
+<odoo>
+    <record id="create_opd_pharmacy_vendor_report_from" model="ir.ui.view">
+        <field name="name">opd.pharmacy.vendor.report.form</field>
+        <field name="model">opd.pharmacy.vendor.report</field>
+        <field name="arch" type="xml">
+            <form string="Opd Pharmacy Vendor Report">
+                <footer>
+                    <button name="opd_pharmacy_vendor_action" string="Print" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="from_date"/>
+                        </group>
+                        <group>
+                            <field name="to_date"/>
+                        </group>
+                        <group>
+                            <field name="partner_ids" widget="many2many_tags" domain="[('type', '!=', 'private')]" />
+                        </group>
+                        <group>
+                            <field name="payment_type"/>
+                        </group>
+
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_opd_pharmacy_vendor_report" model="ir.actions.act_window">
+        <field name="name">Opd Pharmacy Vendor Report</field>
+        <field name="res_model">opd.pharmacy.vendor.report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">form</field>
+        <field name="context">{'default_name': 'Opd Pharmacy Vendor Report'}</field>
+        <field name="view_id" ref="create_opd_pharmacy_vendor_report_from"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

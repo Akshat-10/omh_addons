@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="opd_pharmacy_vendor_xls_report_custom" model="ir.actions.report">
+            <field name="name">Opd Pharmacy Vendor Report</field>
+            <field name="model">opd.pharmacy.vendor.report</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">omh_addons.pharmacy_report_custom_xlsx</field>
+            <field name="report_file">omh_addons.pharmacy_report_custom_xlsx</field>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

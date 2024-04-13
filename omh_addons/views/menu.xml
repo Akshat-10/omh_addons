@@ -1,0 +1,8 @@
+<odoo>
+    <data>
+    <menuitem id="menu_opd_report" name="OPD Pharmacy Vendor Reports" sequence="19"/>
+
+    <menuitem id="menu_opd_pharmacy_vendor_report_new" name="OPD Pharmacy Vendor Report" parent="menu_opd_report"
+              action="action_opd_pharmacy_vendor_report" />
+    </data>
+</odoo>
