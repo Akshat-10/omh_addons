@@ -30,19 +30,15 @@ class OmhPharmacyReportXlsx(models.AbstractModel):
         sheet.write(row, col + 4, 'Payment Status', bold)
 
         vendor_totals = {}
+        # paid = []
+        # not_paid = []
+        # partial = []
 
         for bill in data['bill_ids']:
             bill_id = self.env['account.move'].browse(bill)
             vendor_name = bill_id.partner_id.name
             payment_status = bill_id.payment_state
-
-
-            # bank_ids = bill_id.partner_id.bank_ids
-            # bank_name = ''
-            # account_number = ''
-            # if bank_ids:
-            #     bank_name = bank_ids[0].bank_id.name
-            #     account_number = bank_ids[0].acc_number
+            partner = bill_id.partner_id.id
 
             bank_name = ''
             account_number = ''
@@ -52,36 +48,41 @@ class OmhPharmacyReportXlsx(models.AbstractModel):
                 bank_name = bank_ids[0].bank_id.name
                 account_number = bank_ids[0].acc_number
 
-       
             total_amount = -bill_id.amount_total_signed
 
-            if (vendor_name, payment_status) in vendor_totals:
-                vendor_totals[(vendor_name, payment_status)] += total_amount
-            else:
-                vendor_totals[(vendor_name, payment_status)] = total_amount
+            # if payment_status == 'paid':
+            #     paid.append(bill_id.id)
+            # elif payment_status == 'not_paid':
+            #     not_paid.append(bill_id.id)
+            # else:
+            #     partial.append(bill_id.id)
 
+            if (vendor_name, payment_status, bank_name, account_number, partner) in vendor_totals:
+                vendor_totals[(vendor_name, payment_status, bank_name, account_number, partner )] += total_amount
+            else:
+                vendor_totals[(vendor_name, payment_status, bank_name, account_number, partner)] = total_amount
+            print("-----------vendor total-------------------", vendor_totals )
             print("--------------------------93712037219073902173902174-----", bill_id, vendor_name,bank_ids, bank_name, account_number, total_amount, payment_status)
 
-
-        for vendor_status, total_amount in vendor_totals.items():
-            vendor_name, payment_status = vendor_status
+        
+        for vendor_status, total_amount in  sorted(vendor_totals.items()):
+            print("!!!!!!!!!!!! vendor status-!!!!!!!!!!!!!!!!!", vendor_status, total_amount)
+            vendor_name, payment_status, bank_name, account_number, partner = vendor_status
             row += 1
+            # sheet.write(row, col - 1, partner, bold)
             sheet.write(row, col, vendor_name, bold)
 
             sheet.write(row, col + 1, bank_name)
             sheet.write(row, col + 2, account_number)
 
-
-            # if bill_id.partner_id.bank_ids and bill_id.partner_id.bank_ids[0]:
-            #     sheet.write(row, col + 1, bill_id.partner_id.bank_ids[0].bank_id.name)
-            #     sheet.write(row, col + 2, bill_id.partner_id.bank_ids[0].acc_number)
-            # else:
-            #     sheet.write(row, col + 1, '')
-            #     sheet.write(row, col + 2, '')
-
-
             sheet.write(row, col + 3, total_amount)
             sheet.write(row, col + 4, payment_status)
+            # if payment_status == 'paid':
+            #     sheet.write(row, col + 5, str(paid))
+            # elif payment_status == 'not_paid':
+            #     sheet.write(row, col + 5, str(not_paid))
+            # else:
+            #     sheet.write(row, col + 5, str(partial))
 
         workbook.close()
 
