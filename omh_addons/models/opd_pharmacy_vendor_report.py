@@ -1,4 +1,6 @@
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
+from datetime import datetime
 
 
 class OpdPharmacyVendorReport(models.Model):
@@ -19,6 +21,32 @@ class OpdPharmacyVendorReport(models.Model):
 
     from_date = fields.Date(string='From Date', required=True)
     to_date = fields.Date(string='To Date', required=True)
+
+
+    @api.model
+    def create(self, vals):
+        if vals.get('from_date') and vals.get('to_date'):
+            from_date = datetime.strptime(vals['from_date'], '%Y-%m-%d').date()
+            to_date = datetime.strptime(vals['to_date'], '%Y-%m-%d').date()
+            if from_date > to_date:
+                raise ValidationError("From Date cannot be greater than To Date")
+            if from_date > datetime.today().date():
+                raise ValidationError("From Date cannot be greater than today's date")
+        return super(OpdPharmacyVendorReport, self).create(vals)
+
+    def write(self, vals):
+        if vals.get('from_date') or vals.get('to_date'):
+            from_date = vals.get('from_date', self.from_date)
+            to_date = vals.get('to_date', self.to_date)
+            if from_date and to_date:
+                from_date = datetime.strptime(from_date, '%Y-%m-%d').date()
+                to_date = datetime.strptime(to_date, '%Y-%m-%d').date()
+                if from_date > to_date:
+                    raise ValidationError("From Date cannot be greater than To Date")
+                if from_date > datetime.today().date():
+                    raise ValidationError("From Date cannot be greater than today's date")
+        return super(OpdPharmacyVendorReport, self).write(vals)
+
 
     def opd_pharmacy_vendor_action(self):
         print("---- Button is clicked -----------", self.from_date, self.to_date, self.partner_ids, self.payment_type)
