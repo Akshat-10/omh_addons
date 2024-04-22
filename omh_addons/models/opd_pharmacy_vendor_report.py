@@ -15,15 +15,16 @@ class OpdPharmacyVendorReport(models.Model):
         ('not_paid', 'Not Paid'),
         ('partial','Partial Paid'),
         ('all','All')
-    ], string="Payment Type")
+    ], string="Payment Type", default='all')
 
     from_date = fields.Date(string='From Date', required=True)
     to_date = fields.Date(string='To Date', required=True)
 
     def opd_pharmacy_vendor_action(self):
         print("---- Button is clicked -----------", self.from_date, self.to_date, self.partner_ids, self.payment_type)
+        
 
-        domain = [('invoice_date','>=', self.from_date),('invoice_date','<=', self.to_date),('move_type','=','in_invoice')]
+        domain = [('invoice_date','>=', self.from_date),('invoice_date','<=', self.to_date),('move_type','=','in_invoice'),('warehouse_id', '=', 14)]
 
         if self.partner_ids:
             domain.append(('partner_id','in', self.partner_ids.ids))

@@ -6,7 +6,7 @@
     "author": "Akshat Gupta",
     "website": "",
     "depends": [
-        'base','report_xlsx','account'
+        'base','report_xlsx','account','base_accounting_kit'
     ],
 	'version': '16.0.1',
     "data": [

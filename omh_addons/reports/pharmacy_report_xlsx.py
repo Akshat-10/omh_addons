@@ -14,15 +14,21 @@ class OmhPharmacyReportXlsx(models.AbstractModel):
 
         sheet = workbook.add_worksheet('OPD Pharmacy Vendor Report')
         bold = workbook.add_format({'bold': True})
-        sheet.set_column('C:C', 20)
-        sheet.set_column('D:D', 15)
-        sheet.set_column('E:E', 15)
-        sheet.set_column('F:F', 15)
-        sheet.set_column('G:G', 15)
-        sheet.set_column('H:H', 15)
+        # sheet.set_column('C:C', 20)
+        # sheet.set_column('D:D', 15)
+        # sheet.set_column('E:E', 15)
+        # sheet.set_column('F:F', 15)
+        # sheet.set_column('G:G', 15)
+        # sheet.set_column('H:H', 15)
+        sheet.set_column('A:A', 30)
+        sheet.set_column('B:B', 30)
+        sheet.set_column('C:C', 30)
+        sheet.set_column('D:D', 30)
+        sheet.set_column('E:E', 30)
+        # sheet.set_column('F:F', 30)
 
-        row = 2
-        col = 2
+        row = 0
+        col = 0
         sheet.write(row, col, 'Vendor Name', bold)
         sheet.write(row, col + 1, 'Bank Name', bold)
         sheet.write(row, col + 2, 'Account Number', bold)
@@ -39,6 +45,7 @@ class OmhPharmacyReportXlsx(models.AbstractModel):
             vendor_name = bill_id.partner_id.name
             payment_status = bill_id.payment_state
             partner = bill_id.partner_id.id
+            warehouse = bill_id.warehouse_id.name
 
             bank_name = ''
             account_number = ''
@@ -62,7 +69,7 @@ class OmhPharmacyReportXlsx(models.AbstractModel):
             else:
                 vendor_totals[(vendor_name, payment_status, bank_name, account_number, partner)] = total_amount
             print("-----------vendor total-------------------", vendor_totals )
-            print("--------------------------93712037219073902173902174-----", bill_id, vendor_name,bank_ids, bank_name, account_number, total_amount, payment_status)
+            print("--------------------------93712037219073902173902174-----", bill_id, vendor_name,bank_ids, bank_name, account_number, total_amount, payment_status, warehouse)
 
         
         for vendor_status, total_amount in  sorted(vendor_totals.items()):
